@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="../../../Downloads/PeopleVille2023 (1)/PeopleVille2023/PeopleVilleBaseVillagers/PeopleVilleBaseVillagers.csproj" />
+  <Project Path="../../../Downloads/PeopleVille2023 (1)/PeopleVille2023/PeopleVilleEngine/PeopleVilleEngine.csproj" />
+  <Project Path="../../../Downloads/PeopleVille2023 (1)/PeopleVille2023/PeopleVilleVillagerHomeless/PeopleVilleVillagerHomeless.csproj" />
   <Project Path="PeopleVille/PeopleVille.csproj" />
 </Solution>
