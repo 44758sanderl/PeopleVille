@@ -3,10 +3,14 @@ using PeopleVilleEngine.Items;
 using PeopleVilleEngine.Items.Equiment;
 using PeopleVilleEngine.Items.Cosumable.Food;
 using PeopleVilleEngine.Locations;
+using PeopleVilleEngine.lib.Exceptions;
 
 public abstract class BaseVillager
 {
     public int Age { get; protected set; }
+    public int Hunger { get; protected set; }
+    public int MinHunger { get; protected set; }
+    public int MaxHunger { get; protected set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public bool IsMale { get; set; }
@@ -25,6 +29,9 @@ public abstract class BaseVillager
 
     protected BaseVillager(Village village)
     {
+        Hunger = 50;
+        MaxHunger = 100;
+        MinHunger = 0;
         _village = village;
         IsMale = RNG.GetInstance().Next(0, 2) == 0;
         (FirstName, LastName) = village.VillagerNameLibrary.GetRandomNames(IsMale);
@@ -34,6 +41,17 @@ public abstract class BaseVillager
             Items.Add(availableItems[index]);
             availableItems.RemoveAt(index);
         }
+    }
+
+
+    public void Consume(IConsumable consumeable)
+    {
+        if (Hunger == MaxHunger)
+        {
+            throw new HungerAlreadyFullException();
+        }
+
+        Hunger = Math.Min(MaxHunger, Hunger + consumeable.HungerRestored);
     }
 
     public override string ToString()

@@ -6,10 +6,8 @@ namespace PeopleVilleEngine.Items.Equiment
 {
     public class TShirt : BaseItem
     {
-        public int HungerRestored { get; }
-        public TShirt() : base("TShirt")
+        public TShirt() : base("TShirt", "A TShirt you can wear that keeps you a little warm")
         {
-            HungerRestored = 10;
         }
     }
 }

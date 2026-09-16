@@ -9,9 +9,11 @@ namespace PeopleVilleEngine.Items
         public string Name { get; }
         public string Description { get; }
         public int Value { get; private set; }
-        protected BaseItem (string name)
+
+        protected BaseItem (string name, string description)
         {
             Name = name;
+            Description = description;
         }
 
         public void SetValue(int value)
