@@ -10,4 +10,8 @@
     <Exec Command="copy /Y &quot;$(TargetDir)$(ProjectName).*&quot; &quot;$(SolutionDir)PeopleVilleEngine\lib&quot;" />
   </Target>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PeopleVilleEngine\PeopleVilleEngine.csproj" />
+  </ItemGroup>
+
 </Project>
