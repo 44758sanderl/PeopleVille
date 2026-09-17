@@ -5,6 +5,10 @@ using PeopleVilleEngine.Locations;
 
 internal class Program
     {
+        public static void OnVillagerDie(BaseVillager villager)
+    {
+        Console.WriteLine($"Villager {villager.FirstName} died");
+    }
         static void Main(string[] args)
         {
             Console.WriteLine("PeopleVille");
@@ -22,6 +26,9 @@ internal class Program
             {
                 locationStatus += $" {villager}";
                 IConsumable? item = villager.Items.OfType<IConsumable>().FirstOrDefault();
+                villager.Died += OnVillagerDie;
+
+                villager.Die();
                 if (item != null)
 
                     {
@@ -40,6 +47,7 @@ internal class Program
                      
                 }
                 Console.WriteLine(locationStatus);
+                
             }
             while (true)
             {
