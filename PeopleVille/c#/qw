@@ -1,182 +1,133 @@
 using System;
-using System.Collections.Generic;
 
-public class Resident
+public class Bank
 {
     public string Name { get; set; }
-    public Location CurrentLocation { get; private set; }
+    public int Money { get; private set; }
+    public bool HasBankCard { get; private set; }
+    public bool HasAccount { get; private set; }
 
-    public List<string> Items { get; set; }
-
-    public int Money { get; set; }
-
-    public Resident(string name, int money)
+    public Bank(string name, int money)
     {
         Name = name;
         Money = money;
+        HasBankCard = false;
+        HasAccount = false;
+    }
 
-        Items = new List<string>
+    public void CreateAccount()
+    {
+        if (!HasAccount)
         {
-            "Telefon",
-            "Nøgle",
-            "Bog"
-        };
-    }
-
-    public void MoveTo(Location location)
-    {
-        CurrentLocation = location;
-
-        Console.WriteLine();
-        Console.WriteLine($"{Name} går til {location.Name}.");
-
-        location.Interact(this);
-    }
-
-    public void AddItem(string item)
-    {
-        Items.Add(item);
-
-        Console.WriteLine($"{Name} fik {item}.");
-    }
-
-    public void RemoveItem(string item)
-    {
-        if (Items.Contains(item))
-        {
-            Items.Remove(item);
-
-            Console.WriteLine($"{Name} mistede {item}.");
-        }
-    }
-
-    public void ShowInfo()
-    {
-        Console.WriteLine();
-        Console.WriteLine($"--- {Name} ---");
-        Console.WriteLine($"Penge: {Money} kr.");
-
-        Console.WriteLine("Ting:");
-
-        foreach (string item in Items)
-        {
-            Console.WriteLine($"- {item}");
-        }
-    }
-}
-
-
-// -----------------------------------
-// LOCATION
-// -----------------------------------
-
-public class Location
-{
-    public string Name { get; set; }
-
-    public Location(string name)
-    {
-        Name = name;
-    }
-
-    public virtual void Interact(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} er ved {Name}."
-        );
-    }
-}
-
-
-// -----------------------------------
-// BANK
-// -----------------------------------
-
-public class Bank : Location
-{
-    public Bank(string name) : base(name)
-    {
-    }
-
-    public override void Interact(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} går ind i banken."
-        );
-
-        Console.WriteLine(
-            "Her kan du ordne dine penge."
-        );
-    }
-
-    public void CheckMoney(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} har {resident.Money} kr."
-        );
-    }
-
-    public void Deposit(Resident resident, int amount)
-    {
-        resident.Money += amount;
-
-        Console.WriteLine(
-            $"{resident.Name} satte {amount} kr. ind."
-        );
-    }
-
-    public void Withdraw(Resident resident, int amount)
-    {
-        if (resident.Money >= amount)
-        {
-            resident.Money -= amount;
-
-            Console.WriteLine(
-                $"{resident.Name} hævede {amount} kr."
-            );
+            HasAccount = true;
+            Console.WriteLine("Bankkonto oprettet.");
         }
         else
         {
-            Console.WriteLine(
-                $"{resident.Name} har ikke nok penge."
-            );
+            Console.WriteLine("Du har allerede en konto.");
         }
     }
 
-    public void GetBankCard(Resident resident)
+    public void CheckMoney()
     {
-        if (!resident.Items.Contains("Bankkort"))
+        Console.WriteLine($"Din saldo er {Money} kr.");
+    }
+
+    public void Deposit(int amount)
+    {
+        if (amount > 0)
         {
-            resident.AddItem("Bankkort");
+            Money += amount;
+            Console.WriteLine($"Du satte {amount} kr. ind.");
         }
         else
         {
-            Console.WriteLine(
-                $"{resident.Name} har allerede et bankkort."
-            );
+            Console.WriteLine("Beløbet skal være større end 0.");
         }
     }
 
-    public void TransferMoney(
-        Resident from,
-        Resident to,
-        int amount)
+    public void Withdraw(int amount)
     {
-        if (from.Money >= amount)
+        if (amount <= 0)
         {
-            from.Money -= amount;
-            to.Money += amount;
-
-            Console.WriteLine(
-                $"{from.Name} sendte {amount} kr. " +
-                $"til {to.Name}."
-            );
+            Console.WriteLine("Beløbet skal være større end 0.");
+        }
+        else if (Money >= amount)
+        {
+            Money -= amount;
+            Console.WriteLine($"Du hævede {amount} kr.");
         }
         else
         {
-            Console.WriteLine(
-                $"{from.Name} har ikke nok penge."
-            );
+            Console.WriteLine("Du har ikke nok penge.");
+        }
+    }
+
+    public void GetBankCard()
+    {
+        if (!HasBankCard)
+        {
+            HasBankCard = true;
+            Console.WriteLine("Du har fået et bankkort.");
+        }
+        else
+        {
+            Console.WriteLine("Du har allerede et bankkort.");
+        }
+    }
+
+    public void PayBill(int amount)
+    {
+        if (amount <= 0)
+        {
+            Console.WriteLine("Beløbet skal være større end 0.");
+        }
+        else if (Money >= amount)
+        {
+            Money -= amount;
+            Console.WriteLine($"Du betalte en regning på {amount} kr.");
+        }
+        else
+        {
+            Console.WriteLine("Du har ikke nok penge.");
+        }
+    }
+
+    public void ShowBankCard()
+    {
+        if (HasBankCard)
+        {
+            Console.WriteLine("Du har et aktivt bankkort.");
+        }
+        else
+        {
+            Console.WriteLine("Du har ikke et bankkort.");
+        }
+    }
+
+    public void ShowAccount()
+    {
+        if (HasAccount)
+        {
+            Console.WriteLine("Din konto er aktiv.");
+            Console.WriteLine("Kontonummer: 123456789");
+        }
+        else
+        {
+            Console.WriteLine("Du har ingen bankkonto.");
+        }
+    }
+
+    public void CloseAccount()
+    {
+        if (HasAccount)
+        {
+            HasAccount = false;
+            Console.WriteLine("Din konto er blevet lukket.");
+        }
+        else
+        {
+            Console.WriteLine("Du har ingen konto at lukke.");
         }
     }
 }
@@ -186,212 +137,18 @@ public class Bank : Location
 // SUPERMARKED
 // -----------------------------------
 
-public class Supermarket : Location
+public class Supermarket
 {
-    public Supermarket(string name) : base(name)
+    public string Name { get; set; }
+
+    public Supermarket(string name)
     {
+        Name = name;
     }
 
-    public override void Interact(Resident resident)
+    public void ShowSupermarket()
     {
-        Console.WriteLine(
-            $"{resident.Name} handler i supermarkedet."
-        );
-
-        Console.WriteLine(
-            "Her kan du købe mad."
-        );
-    }
-
-    public void BuyFood(Resident resident)
-    {
-        if (resident.Money >= 50)
-        {
-            resident.Money -= 50;
-
-            resident.AddItem("Mad");
-
-            Console.WriteLine(
-                $"{resident.Name} købte mad for 50 kr."
-            );
-        }
-        else
-        {
-            Console.WriteLine(
-                "Du har ikke nok penge til mad."
-            );
-        }
-    }
-}
-
-
-// -----------------------------------
-// HOSPITAL
-// -----------------------------------
-
-public class Hospital : Location
-{
-    public Hospital(string name) : base(name)
-    {
-    }
-
-    public override void Interact(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} besøger hospitalet."
-        );
-
-        Console.WriteLine(
-            "Lægen hjælper dig."
-        );
-    }
-
-    public void VisitDoctor(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} bliver undersøgt af lægen."
-        );
-
-        Console.WriteLine(
-            "Alt ser fint ud."
-        );
-    }
-}
-
-
-// -----------------------------------
-// RESTAURANT
-// -----------------------------------
-
-public class Restaurant : Location
-{
-    public Restaurant(string name) : base(name)
-    {
-    }
-
-    public override void Interact(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} besøger restauranten."
-        );
-    }
-
-    public void BuyFood(Resident resident)
-    {
-        if (resident.Money >= 100)
-        {
-            resident.Money -= 100;
-
-            resident.AddItem("Restaurantmad");
-
-            Console.WriteLine(
-                $"{resident.Name} spiste på restauranten."
-            );
-        }
-        else
-        {
-            Console.WriteLine(
-                "Du har ikke nok penge til at spise."
-            );
-        }
-    }
-}
-
-
-// -----------------------------------
-// SKOLE
-// -----------------------------------
-
-public class School : Location
-{
-    public School(string name) : base(name)
-    {
-    }
-
-    public override void Interact(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} er på skolen."
-        );
-
-        Console.WriteLine(
-            "Der bliver undervist i dag."
-        );
-    }
-
-    public void Study(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} læser en bog."
-        );
-
-        Console.WriteLine(
-            $"{resident.Name} lærte noget nyt."
-        );
-    }
-}
-
-
-// -----------------------------------
-// PARK
-// -----------------------------------
-
-public class Park : Location
-{
-    public Park(string name) : base(name)
-    {
-    }
-
-    public override void Interact(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} går rundt i parken."
-        );
-
-        Console.WriteLine(
-            "Det er en hyggelig dag i landsbyen."
-        );
-    }
-
-    public void SitDown(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} sætter sig på en bænk."
-        );
-
-        Console.WriteLine(
-            $"{resident.Name} slapper lidt af."
-        );
-    }
-}
-
-
-// -----------------------------------
-// HUS
-// -----------------------------------
-
-public class House : Location
-{
-    public House(string name) : base(name)
-    {
-    }
-
-    public override void Interact(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} er hjemme."
-        );
-    }
-
-    public void Sleep(Resident resident)
-    {
-        Console.WriteLine(
-            $"{resident.Name} går i seng."
-        );
-
-        Console.WriteLine(
-            $"{resident.Name} har sovet godt."
-        );
+        Console.WriteLine($"Du er ved {Name}.");
     }
 }
 
@@ -404,156 +161,138 @@ public class Program
 {
     public static void Main()
     {
-        Console.WriteLine(
-            "================================"
-        );
+        // Bank er et objekt
+        Bank bank = new Bank("Banken", 1000);
+
+        // Supermarked er et objekt
+        Supermarket supermarket = new Supermarket("Supermarkedet");
+
+        bool running = true;
+
+        while (running)
+        {
+            Console.WriteLine("================================");
+            Console.WriteLine("              BANKEN");
+            Console.WriteLine("================================");
+            Console.WriteLine();
+
+            Console.WriteLine("1. Opret bankkonto");
+            Console.WriteLine("2. Se saldo");
+            Console.WriteLine("3. Sæt penge ind");
+            Console.WriteLine("4. Hæv penge");
+            Console.WriteLine("5. Få bankkort");
+            Console.WriteLine("6. Se bankkort");
+            Console.WriteLine("7. Se konto");
+            Console.WriteLine("8. Betal regning");
+            Console.WriteLine("9. Luk konto");
+            Console.WriteLine("10. Se lokationer");
+            Console.WriteLine("11. Afslut");
+            Console.WriteLine();
+
+            Console.Write("Vælg en mulighed: ");
+
+            string choice = Console.ReadLine() ?? "";
+
+            Console.WriteLine();
+
+            switch (choice)
+            {
+                case "1":
+                    bank.CreateAccount();
+                    break;
+
+                case "2":
+                    bank.CheckMoney();
+                    break;
+
+                case "3":
+                    Console.Write("Hvor mange penge vil du sætte ind? ");
+
+                    if (int.TryParse(Console.ReadLine(), out int deposit))
+                    {
+                        bank.Deposit(deposit);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Du skal skrive et tal.");
+                    }
+
+                    break;
+
+                case "4":
+                    Console.Write("Hvor mange penge vil du hæve? ");
+
+                    if (int.TryParse(Console.ReadLine(), out int withdraw))
+                    {
+                        bank.Withdraw(withdraw);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Du skal skrive et tal.");
+                    }
+
+                    break;
+
+                case "5":
+                    bank.GetBankCard();
+                    break;
+
+                case "6":
+                    bank.ShowBankCard();
+                    break;
+
+                case "7":
+                    bank.ShowAccount();
+                    break;
+
+                case "8":
+                    Console.Write("Hvor stor er regningen? ");
+
+                    if (int.TryParse(Console.ReadLine(), out int bill))
+                    {
+                        bank.PayBill(bill);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Du skal skrive et tal.");
+                    }
+
+                    break;
+
+                case "9":
+                    bank.CloseAccount();
+                    break;
 
-        Console.WriteLine(
-            "       VELKOMMEN TIL LANDSBYEN"
-        );
+                case "10":
+                    Console.WriteLine("Dine lokationer:");
+                    Console.WriteLine();
 
-        Console.WriteLine(
-            "================================"
-        );
+                    Console.WriteLine("Bank:");
+                    Console.WriteLine(bank.Name);
 
+                    Console.WriteLine();
 
-        // Steder i landsbyen
+                    supermarket.ShowSupermarket();
 
-        Bank bank =
-            new Bank("Banken");
+                    break;
 
-        Supermarket supermarket =
-            new Supermarket("Supermarkedet");
+                case "11":
+                    running = false;
 
-        Hospital hospital =
-            new Hospital("Hospitalet");
+                    Console.WriteLine("Tak for besøget i banken!");
+                    break;
 
-        Restaurant restaurant =
-            new Restaurant("Restauranten");
+                default:
+                    Console.WriteLine("Ugyldigt valg. Prøv igen.");
+                    break;
+            }
 
-        School school =
-            new School("Skolen");
-
-        Park park =
-            new Park("Parken");
-
-        House house =
-            new House("Peters hus");
-
-
-        // Personer
-
-        Resident peter =
-            new Resident("Peter", 1000);
-
-        Resident anna =
-            new Resident("Anna", 700);
-
-
-        // --------------------------------
-        // PETER
-        // --------------------------------
-
-        Console.WriteLine();
-        Console.WriteLine("========== PETER ==========");
-
-        peter.MoveTo(bank);
-
-        bank.CheckMoney(peter);
-
-        bank.GetBankCard(peter);
-
-        bank.Deposit(peter, 200);
-
-        bank.Withdraw(peter, 100);
-
-        bank.TransferMoney(
-            peter,
-            anna,
-            200
-        );
-
-
-        peter.MoveTo(supermarket);
-
-        supermarket.BuyFood(peter);
-
-
-        peter.MoveTo(restaurant);
-
-        restaurant.BuyFood(peter);
-
-
-        peter.MoveTo(park);
-
-        park.SitDown(peter);
-
-
-        peter.MoveTo(school);
-
-        school.Study(peter);
-
-
-        peter.MoveTo(hospital);
-
-        hospital.VisitDoctor(peter);
-
-
-        peter.MoveTo(house);
-
-        house.Sleep(peter);
-
-
-        // --------------------------------
-        // ANNA
-        // --------------------------------
-
-        Console.WriteLine();
-        Console.WriteLine("========== ANNA ==========");
-
-        anna.MoveTo(bank);
-
-        bank.CheckMoney(anna);
-
-        bank.GetBankCard(anna);
-
-
-        anna.MoveTo(supermarket);
-
-        supermarket.BuyFood(anna);
-
-
-        anna.MoveTo(park);
-
-        park.SitDown(anna);
-
-
-        anna.MoveTo(restaurant);
-
-        restaurant.BuyFood(anna);
-
-
-        anna.MoveTo(house);
-
-        house.Sleep(anna);
-
-
-        // --------------------------------
-        // SLUT
-        // --------------------------------
-
-        Console.WriteLine();
-        Console.WriteLine(
-            "========== SLUT =========="
-        );
-
-        peter.ShowInfo();
-
-        anna.ShowInfo();
-
-        Console.WriteLine();
-        Console.WriteLine(
-            "Tak for besøget i landsbyen!"
-        );
+            if (running)
+            {
+                Console.WriteLine();
+                Console.WriteLine("Tryk Enter for at fortsætte...");
+                Console.ReadLine();
+            }
+        }
     }
 }
