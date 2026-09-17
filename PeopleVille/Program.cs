@@ -41,6 +41,33 @@ internal class Program
                 }
                 Console.WriteLine(locationStatus);
             }
+            while (true)
+            {
+                Console.WriteLine("\nChoose an action:");
+                Console.WriteLine("1. Go to the bank");
+                Console.WriteLine("2. Go to the market");
+                Console.WriteLine("3. Exit");
+
+                var input = Console.ReadLine();
+
+                switch (input)
+                {
+                    case "1":
+                        // Go to the bank
+                        break;
+                    case "2":
+                        var market = new Market(village);
+                        market.OpenMarket();
+                        break;
+                    case "3":
+                        // Exit
+                        return;
+                    default:
+                        Console.WriteLine("Invalid option. Please choose again.");
+                        break;
+                }
+            }
         }
+
     }
 
