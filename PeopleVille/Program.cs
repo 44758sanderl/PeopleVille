@@ -4,6 +4,10 @@ using PeopleVilleEngine.Items;
 
 internal class Program
     {
+    private static void OnVillagerDie(BaseVillager villager)
+    {
+        Console.WriteLine($"Villager {villager.FirstName} died");
+    }
         static void Main(string[] args)
         {
             Console.WriteLine("PeopleVille");
@@ -11,7 +15,7 @@ internal class Program
             //Create village
             var village = new Village();
             Console.WriteLine(village.ToString());
-
+            
 
             //Print locations with villagers to screen
             foreach (var location in village.Locations)
@@ -36,9 +40,14 @@ internal class Program
                     } else {
                         Console.WriteLine("Villager don't have any consumeable items");
                     }
-                     
-                }
+
+                villager.Died += OnVillagerDie;
+
+                villager.Die();
+            }
+                
                 Console.WriteLine(locationStatus);
+
             }
         }
     }
