@@ -19,6 +19,7 @@ public abstract class BaseVillager
     public ILocation? Home { get; set; } = null;
     public bool HasHome() => Home != null;
 
+    public event Action<BaseVillager>? Died;
     readonly List<BaseItem> availableItems = new List<BaseItem>
     {
         new Apple(),
@@ -43,6 +44,10 @@ public abstract class BaseVillager
         }
     }
 
+    public void Die()
+    {
+        Died?.Invoke(this);
+    }
 
     public void Consume(IConsumable consumeable)
     {
