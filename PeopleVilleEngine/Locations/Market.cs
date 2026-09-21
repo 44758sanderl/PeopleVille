@@ -4,30 +4,39 @@ using System.Text;
 
 namespace PeopleVilleEngine.Locations
 {
-    public class Market
+    public class Market : ILocation
     {
         private readonly Village _village;
+        private readonly List<BaseVillager> _baseVillagerList = new();
+        public string Name => "This is a market!";
 
         public Market(Village village)
         {
             _village = village;
         }
 
-        public void OpenMarket()
+        public List<BaseVillager> Villagers()
         {
-            Console.WriteLine("Welcome to the Market!");
-            var villagers = _village.Villagers;
-
-            for (int i = 0; i < villagers.Count; i++)
-                Console.WriteLine($"{i}: {villagers[i].FirstName}");
-
-            Console.WriteLine("Choose first villager index:");
-            int v1Index = int.Parse(Console.ReadLine());
-            Console.WriteLine("Choose second villager index:");
-            int v2Index = int.Parse(Console.ReadLine());
-
-            Trade(villagers[v1Index], villagers[v2Index]);
+            return _baseVillagerList;
         }
+
+
+
+        //public void OpenMarket()
+        //{
+        //    Console.WriteLine("Welcome to the Market!");
+        //    var villagers = _village.Villagers;
+
+        //    for (int i = 0; i < villagers.Count; i++)
+        //        Console.WriteLine($"{i}: {villagers[i].FirstName}");
+
+        //    Console.WriteLine("Choose first villager index:");
+        //    int v1Index = int.Parse(Console.ReadLine());
+        //    Console.WriteLine("Choose second villager index:");
+        //    int v2Index = int.Parse(Console.ReadLine());
+
+        //    Trade(villagers[v1Index], villagers[v2Index]);
+        //}
 
         private void Trade(BaseVillager villager1, BaseVillager villager2)
         {

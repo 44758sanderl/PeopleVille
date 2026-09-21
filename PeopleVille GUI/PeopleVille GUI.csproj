@@ -17,7 +17,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="MarketForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Assets\House.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\Market.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Assets\Village.jpg">

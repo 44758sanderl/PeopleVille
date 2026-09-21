@@ -65,7 +65,7 @@ internal class Program
                         break;
                     case "2":
                         var market = new Market(village);
-                        market.OpenMarket();
+                        // market.OpenMarket();
                         break;
                     case "3":
                         // Exit

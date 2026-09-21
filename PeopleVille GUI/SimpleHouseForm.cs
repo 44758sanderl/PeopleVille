@@ -1,4 +1,5 @@
-﻿using PeopleVilleEngine.Locations;
+﻿using PeopleVille_GUI.Components;
+using PeopleVilleEngine.Locations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,36 +33,10 @@ namespace PeopleVille_GUI
 
             foreach (BaseVillager villager in _location.Villagers())
             {
-                var simpleHouseBox = new Panel
-                {
-                    Width = 200,
-                    Height = 300,
-                    BorderStyle = BorderStyle.FixedSingle
-                };
 
-                var simpleHouseName = new Label
-                {
-                    Text = villager.FirstName,
-                    Location = new Point(0, 0),
-                    Height = 100,
-                    Width = 200,
-                    TextAlign = ContentAlignment.MiddleCenter
-                };
+                VillagerComponent component = new VillagerComponent(villager);
 
-                var simpleHouseImage = new PictureBox
-                {
-                    Width = 200,
-                    Height = 200,
-                    Location = new Point(0, 100),
-                    SizeMode = PictureBoxSizeMode.StretchImage,
-                    Image = Image.FromFile("Assets/Villager.jpg"),
-                    Enabled = false
-                };
-
-                simpleHouseBox.Controls.Add(simpleHouseName);
-                simpleHouseBox.Controls.Add(simpleHouseImage);
-
-                _simpleHousePanel.Controls.Add(simpleHouseBox);
+                _simpleHousePanel.Controls.Add(component);
             }
         }
     }

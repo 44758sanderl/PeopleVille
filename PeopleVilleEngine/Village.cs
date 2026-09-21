@@ -29,7 +29,7 @@ public class Village
 
         int villageCreatorindex = 0;
 
-        for (int i = 0; i < villagers; i++)
+        for (int i = 0; i < villagers; i++) 
         {
             var created = false;
             do
@@ -39,7 +39,10 @@ public class Village
             } while (!created);
         }
 
+        Market newMarket = new Market(this);
+        Locations.Add(newMarket);
         Console.ResetColor();
+        
     }
 
     private List<IVillagerCreator> LoadVillagerCreatorFactories()
