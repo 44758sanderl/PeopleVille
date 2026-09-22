@@ -13,8 +13,10 @@ namespace PeopleVille_GUI
 {
     public partial class VillagerActionMenu : Form
     {
+        private readonly EventManager _eventManager;
         public VillagerActionMenu(BaseVillager villager)
         {
+            _eventManager = EventManager.GetEventManager();
             Size = new Size(300, 400);
             this.StartPosition = FormStartPosition.CenterParent;
 
@@ -91,7 +93,8 @@ namespace PeopleVille_GUI
                     LocationsForm locationsForm = new LocationsForm(village,
                         (location) =>
                         {
-                            MessageBox.Show($"Going to location: {location.Name}");
+                            villager.MoveVillager(location);
+                            _eventManager.VillagerMoved();
                         },
                         (LocationComponent, location) =>
                         {

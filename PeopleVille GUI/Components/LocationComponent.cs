@@ -11,15 +11,17 @@ namespace PeopleVille_GUI.Components
 
         public PictureBox Picture { get; }
         public Label Title { get; }
+        public LocationsForm LocationForm { get; }
 
 
         public LocationComponent(
+            LocationsForm locationForm,
             ILocation location,
             Action<ILocation> onClick,
             Action<LocationComponent, ILocation> onInitialize)
         {
             _location = location;
-
+            LocationForm = locationForm;
             Size = new Size(200, 300);
             BorderStyle = BorderStyle.FixedSingle;
 

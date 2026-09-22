@@ -9,23 +9,15 @@ namespace PeopleVille_GUI
     {
         private readonly Village _village;
         private readonly FlowLayoutPanel _locationPanel;
-
+        public event Action NewVillager;
+        private readonly EventManager _eventManager;
         private readonly Action<ILocation> _cardClick;
         private readonly Action<LocationComponent, ILocation> _cardOnInitilize;
-        private void OpenSimpleHouse(SimpleHouse location)
-        {
-            var window = new SimpleHouseForm(location);
-            window.Show();
-        }
 
-        private void OpenMarket(Market location)
-        {
-            var window = new MarketForm(location);
-            window.Show();
-        }
 
         public LocationsForm(Village village, Action<ILocation> cardClickFunction, Action<LocationComponent, ILocation> onCardInitilize)
         {
+            _eventManager = EventManager.GetEventManager();
             _village = village;
             _cardClick = cardClickFunction;
             _cardOnInitilize = onCardInitilize;
@@ -43,17 +35,29 @@ namespace PeopleVille_GUI
 
             Controls.Add(_locationPanel);
 
+            _eventManager.VillagerMovedAction += () =>
+            {
+                LoadLocations();
+            };
+
+
             CreateLocationControls();
+        }
+
+        private void LoadLocations()
+        {
+            _locationPanel.Controls.Clear();
+            foreach (ILocation location in _village.Locations)
+            {
+                Panel panel;
+                panel = new LocationComponent(this ,location, _cardClick,  _cardOnInitilize);
+                _locationPanel.Controls.Add(panel);
+            }
         }
 
         private void CreateLocationControls()
         {
-            foreach (ILocation location in _village.Locations)
-            {
-                Panel panel;
-                panel = new LocationComponent(location, _cardClick,  _cardOnInitilize);
-                _locationPanel.Controls.Add(panel);
-            }
+            LoadLocations();
         }
     }
 }

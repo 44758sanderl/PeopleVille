@@ -19,6 +19,8 @@ public abstract class BaseVillager
     public ILocation? Home { get; set; } = null;
     public bool HasHome() => Home != null;
 
+    public ILocation CurrentLocation;
+
     public event Action<BaseVillager>? Died;
     readonly List<BaseItem> availableItems = new List<BaseItem>
     {
@@ -27,6 +29,13 @@ public abstract class BaseVillager
         new TShirt(),
         new Bread(),
     };
+
+    public void MoveVillager(ILocation newLocation)
+    {
+        CurrentLocation.Villagers().Remove(this);
+        newLocation.Villagers().Add(this);
+        CurrentLocation = newLocation;
+    }
 
     protected BaseVillager(Village village)
     {
