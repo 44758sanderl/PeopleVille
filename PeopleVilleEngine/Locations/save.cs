@@ -45,6 +45,9 @@ class Resident
     public Location CurrentLocation { get; private set; }
     public Location? Destination { get; private set; }
 
+    public int Age { get; set; }
+    public string Job { get; set; }
+
     public bool IsMoving
     {
         get { return Destination != null; }
@@ -59,9 +62,27 @@ class Resident
     public event ResidentMovement? MovementStarted;
     public event ResidentMovement? MovementFinished;
 
+    
     public Resident(string name, Location location)
     {
         Name = name;
+        CurrentLocation = location;
+
+        Age = 0;
+        Job = "Ukendt";
+
+        location.AddResident(this);
+    }
+
+    public Resident(
+        string name,
+        int age,
+        string job,
+        Location location)
+    {
+        Name = name;
+        Age = age;
+        Job = job;
         CurrentLocation = location;
 
         location.AddResident(this);
@@ -76,7 +97,11 @@ class Resident
 
         if (destination == CurrentLocation)
         {
-            Console.WriteLine(Name + " er allerede ved " + destination.Name);
+            Console.WriteLine(
+                Name + " er allerede ved " +
+                destination.Name
+            );
+
             return;
         }
 
@@ -229,26 +254,58 @@ class Program
             hospital
         };
 
+
         Resident walt = new Resident(
             "Walt",
+            34,
+            "Bankrådgiver",
             bank
         );
 
         Resident anna = new Resident(
             "Anna",
+            28,
+            "Sygeplejerske",
             supermarket
         );
 
         Resident peter = new Resident(
             "Peter",
+            42,
+            "Lærer",
             park
+        );
+
+
+        Resident sofie = new Resident(
+            "Sofie",
+            25,
+            "Grafisk designer",
+            hospital
+        );
+
+        Resident mikkel = new Resident(
+            "Mikkel",
+            51,
+            "Mekaniker",
+            bank
+        );
+
+        Resident emma = new Resident(
+            "Emma",
+            31,
+            "Journalist",
+            supermarket
         );
 
         List<Resident> residents = new List<Resident>
         {
             walt,
             anna,
-            peter
+            peter,
+            sofie,
+            mikkel,
+            emma
         };
 
         foreach (Resident resident in residents)
@@ -260,8 +317,27 @@ class Program
         MovementManager movementManager =
             new MovementManager(residents);
 
-        Console.WriteLine("Simulation startet");
+        Console.WriteLine("Simulation starter");
         Console.WriteLine();
+
+        foreach (Resident resident in residents)
+        {
+            Console.WriteLine(
+                resident.Name +
+                " er " +
+                resident.Age +
+                " år og arbejder som " +
+                resident.Job +
+                "."
+            );
+
+            Console.WriteLine(
+                "  Befinder sig ved: " +
+                resident.CurrentLocation.Name
+            );
+
+            Console.WriteLine();
+        }
 
         for (int i = 0; i < 5; i++)
         {
