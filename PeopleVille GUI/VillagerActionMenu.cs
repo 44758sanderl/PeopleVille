@@ -1,4 +1,7 @@
-﻿using System;
+﻿using PeopleVille_GUI.Components;
+using PeopleVilleEngine;
+using PeopleVilleEngine.Locations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -61,12 +64,54 @@ namespace PeopleVille_GUI
                 Margin = new Padding(0, 0, 0, 15)
             };
 
+            Button gotoButton = new Button()
+            {
+                Text = "Go to location",
+                Height = 50,
+                Dock = DockStyle.Top,
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.DarkGray,
+                Margin = new Padding(0, 0, 0, 15)
+            };
+
             inventarButton.Click += (sender, e) =>
             {
                 VillagerInventory inventory = new VillagerInventory(villager);
                 inventory.Show();
             };
 
+
+
+            gotoButton.Click += (sender, e) =>
+            {
+
+                Village? village = Village.VillageInstance;
+                if (village != null)
+                {
+                    LocationsForm locationsForm = new LocationsForm(village,
+                        (location) =>
+                        {
+                            MessageBox.Show($"Going to location: {location.Name}");
+                        },
+                        (LocationComponent, location) =>
+                        {
+                            switch (location)
+                            {
+                                case SimpleHouse:
+                                    LocationComponent.Picture.Image = Image.FromFile("Assets/House.jpg");
+                                    break;
+                                case Market:
+                                    LocationComponent.Picture.Image = Image.FromFile("Assets/Market.jpg");
+                                    break;
+
+                            }
+                        }
+                    );
+                    locationsForm.Show();
+                }
+            };
+
+            mainPanel.Controls.Add(gotoButton);
             mainPanel.Controls.Add(inventarButton);
             mainPanel.Controls.Add(hungerLabel);
             mainPanel.Controls.Add(ageLabel);
@@ -75,5 +120,6 @@ namespace PeopleVille_GUI
 
             this.Controls.Add(mainPanel);
         }
+    
     }
 }

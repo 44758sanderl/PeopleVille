@@ -29,6 +29,9 @@
     <None Update="Assets\Market.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Assets\Placeholder.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Assets\Village.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

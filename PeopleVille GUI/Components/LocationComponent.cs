@@ -8,17 +8,22 @@ namespace PeopleVille_GUI.Components
     public class LocationComponent : Panel
     {
         private readonly ILocation _location;
-        public delegate void OnLocationClick();
 
-        public LocationComponent(ILocation location, String path, OnLocationClick onClick)
+        public PictureBox Picture { get; }
+        public Label Title { get; }
+
+
+        public LocationComponent(
+            ILocation location,
+            Action<ILocation> onClick,
+            Action<LocationComponent, ILocation> onInitialize)
         {
-
             _location = location;
 
-            this.Size = new Size(200, 300);
-            this.BorderStyle = BorderStyle.FixedSingle;
+            Size = new Size(200, 300);
+            BorderStyle = BorderStyle.FixedSingle;
 
-            Label label = new Label()
+            Title = new Label()
             {
                 Text = location.Name,
                 Location = new Point(0, 0),
@@ -27,24 +32,25 @@ namespace PeopleVille_GUI.Components
                 TextAlign = ContentAlignment.MiddleCenter
             };
 
-            PictureBox pictureBox = new PictureBox()
+            Picture = new PictureBox()
             {
                 Width = 200,
                 Height = 200,
                 Location = new Point(0, 100),
                 SizeMode = PictureBoxSizeMode.StretchImage,
-                Image = Image.FromFile(path),
+                Image = Image.FromFile("Assets/Placeholder.jpg"),
                 Enabled = false
             };
 
-            this.Controls.Add(label);
-            this.Controls.Add(pictureBox);
+            Controls.Add(Title);
+            Controls.Add(Picture);
 
-            this.Click += (sender, e) =>
+            onInitialize(this, location);
+
+            Click += (sender, e) =>
             {
-                onClick();
+                onClick(location);
             };
-
         }
     }
 }

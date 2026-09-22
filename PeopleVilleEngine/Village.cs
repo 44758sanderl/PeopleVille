@@ -11,10 +11,12 @@ public class Village
     public List<ILocation> Locations { get; } = new();
     public VillagerNames VillagerNameLibrary { get; } = VillagerNames.GetInstance();
 
+    public static Village? VillageInstance;
     public Village()
     {
         Console.WriteLine("Creating villager");
         CreateVillage();
+        VillageInstance = this;
     }
 
 
