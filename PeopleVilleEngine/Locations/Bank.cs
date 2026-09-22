@@ -1,118 +1,158 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PeopleVilleEngine.Locations
 {
-    public class Bank
+    public class InsufficientFundsException : Exception
     {
-        public string Name { get; set; }
-        public int Money { get; set; }
-        public bool HasBankCard { get; set; }
-        public bool HasAccount { get; set; }
-
-        public Bank(string name, int money)
+        public InsufficientFundsException(string message)
+            : base(message)
         {
-            Name = name;
-            Money = money;
+        }
+    }
+
+    public class BankAccount
+    {
+        public int VillagerId { get; private set; }
+        public int Money { get; private set; }
+        public bool HasBankCard { get; private set; }
+
+        public BankAccount(int villagerId)
+        {
+            VillagerId = villagerId;
+            Money = 0;
             HasBankCard = false;
-            HasAccount = false;
-        }
-
-        public void CreateAccount()
-        {
-            if (!HasAccount)
-            {
-                HasAccount = true;
-                Console.WriteLine("Account created successfully.");
-            }
-            else
-            {
-                Console.WriteLine("You already have an account.");
-            }
-        }
-
-        public void CheckMoney()
-        {
-            if (HasAccount)
-            {
-                Console.WriteLine($"Your account balance is: {Money}");
-            }
-            else
-            {
-                Console.WriteLine("You need to create an account first.");
-            }
         }
 
         public void DepositMoney(int amount)
         {
-            if (HasAccount)
-            {
-                Money += amount;
-                Console.WriteLine($"Deposited {amount}. New balance: {Money}");
-            }
-            else
-            {
-                Console.WriteLine("You need to create an account first.");
-            }
+            if (amount <= 0)
+                throw new ArgumentException("Amount must be greater than 0.");
+
+            Money += amount;
         }
 
         public void WithdrawMoney(int amount)
         {
-            if (HasAccount)
+            if (amount <= 0)
+                throw new ArgumentException("Amount must be greater than 0.");
+
+            if (amount > Money)
             {
-                if (amount <= Money)
-                {
-                    Money -= amount;
-                    Console.WriteLine($"Withdrew {amount}. New balance: {Money}");
-                }
-                else
-                {
-                    Console.WriteLine("Insufficient funds.");
-                }
+                throw new InsufficientFundsException(
+                    "You do not have enough money."
+                );
             }
-            else
-            {
-                Console.WriteLine("You need to create an account first.");
-            }
+
+            Money -= amount;
         }
 
         public void GetBankCard()
         {
-            if (HasAccount)
+            HasBankCard = true;
+        }
+    }
+
+    public class Bank : ILocation
+    {
+        public string Name { get; set; }
+
+        private Dictionary<int, BankAccount> Accounts { get; set; }
+
+        public Bank(string name)
+        {
+            Name = name;
+            Accounts = new Dictionary<int, BankAccount>();
+        }
+
+        // Creates a new account for a villager
+        public void CreateAccount(int villagerId)
+        {
+            if (!Accounts.ContainsKey(villagerId))
             {
-                HasBankCard = true;
-                Console.WriteLine("Bank card issued successfully.");
-            }
-            else
-            {
-                Console.WriteLine("You need to create an account first.");
+                Accounts.Add(
+                    villagerId,
+                    new BankAccount(villagerId)
+                );
             }
         }
 
-        public void PayBill(int amount)
+        
+        public BankAccount GetAccount(int villagerId)
         {
-            if (HasAccount && HasBankCard)
+            if (!Accounts.ContainsKey(villagerId))
             {
-                if (amount <= Money)
-                {
-                    Money -= amount;
-                    Console.WriteLine($"Paid bill of {amount}. New balance: {Money}");
-                }
-                else
-                {
-                    Console.WriteLine("Insufficient funds to pay the bill.");
-                }
+                CreateAccount(villagerId);
             }
-            else
-            {
-                Console.WriteLine("You need to have an account and a bank card to pay bills.");
-            }
+
+            return Accounts[villagerId];
         }
 
-        public void ShowBankCard()
+        public void CheckMoney(int villagerId)
         {
-            if (HasBankCard)
+            BankAccount account = GetAccount(villagerId);
+
+            Console.WriteLine(
+                $"Your balance is: {account.Money}"
+            );
+        }
+
+        public void DepositMoney(int villagerId, int amount)
+        {
+            BankAccount account = GetAccount(villagerId);
+
+            account.DepositMoney(amount);
+
+            Console.WriteLine(
+                $"Deposited {amount}. New balance: {account.Money}"
+            );
+        }
+
+        public void WithdrawMoney(int villagerId, int amount)
+        {
+            BankAccount account = GetAccount(villagerId);
+
+            account.WithdrawMoney(amount);
+
+            Console.WriteLine(
+                $"Withdrew {amount}. New balance: {account.Money}"
+            );
+        }
+
+        public void GetBankCard(int villagerId)
+        {
+            BankAccount account = GetAccount(villagerId);
+
+            account.GetBankCard();
+
+            Console.WriteLine("Bank card issued successfully.");
+        }
+
+        public void PayBill(int villagerId, int amount)
+        {
+            BankAccount account = GetAccount(villagerId);
+
+            if (!account.HasBankCard)
+            {
+                Console.WriteLine(
+                    "You need a bank card to pay bills."
+                );
+
+                return;
+            }
+
+            account.WithdrawMoney(amount);
+
+            Console.WriteLine(
+                $"Bill paid. New balance: {account.Money}"
+            );
+        }
+
+        public void ShowBankCard(int villagerId)
+        {
+            BankAccount account = GetAccount(villagerId);
+
+            if (account.HasBankCard)
             {
                 Console.WriteLine("You have a bank card.");
             }
@@ -122,31 +162,18 @@ namespace PeopleVilleEngine.Locations
             }
         }
 
-        public void ShowAccount()
+        public void ShowAccount(int villagerId)
         {
-            if (HasAccount)
-            {
-                Console.WriteLine("You're account is active.");
-                Console.WriteLine("AccountNumber: 123456789");
-            }
-            else
-            {
-                Console.WriteLine("You do not have an account.");
-            }
+            BankAccount account = GetAccount(villagerId);
+
+            Console.WriteLine("Account is active.");
+            Console.WriteLine($"Villager ID: {account.VillagerId}");
+            Console.WriteLine($"Balance: {account.Money}");
         }
 
-        public void CloseAccount()
+        public List<BaseVillager> Villagers()
         {
-            if (HasAccount)
-            {
-                HasAccount = false;
-                HasBankCard = false;
-                Console.WriteLine("Account closed successfully.");
-            }
-            else
-            {
-                Console.WriteLine("You do not have an account to close.");
-            }
+            throw new NotImplementedException();
         }
     }
-}
+}   
