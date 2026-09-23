@@ -1,4 +1,5 @@
 ﻿using PeopleVille_GUI.Components;
+using PeopleVilleEngine;
 using PeopleVilleEngine.Locations;
 using System;
 using System.Drawing;
@@ -45,7 +46,10 @@ namespace PeopleVille_GUI
 
             foreach (BaseVillager villager in _location.Villagers())
             {
-                VillagerComponent component = new VillagerComponent(villager);
+                VillagerComponent component = new VillagerComponent(villager, () => {
+                    var window = new VillagerActionMenu(villager);
+                    window.Show();
+                });
 
                 _simpleHousePanel.Controls.Add(component);
             }

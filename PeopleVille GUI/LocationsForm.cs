@@ -7,20 +7,25 @@ namespace PeopleVille_GUI
 {
     public class LocationsForm : Form
     {
+        //Fields
         private readonly Village _village;
         private readonly FlowLayoutPanel _locationPanel;
-        public event Action NewVillager;
         private readonly EventManager _eventManager;
+
+        //Actions
         private readonly Action<ILocation> _cardClick;
         private readonly Action<LocationComponent, ILocation> _cardOnInitilize;
 
-
+        //Constructor
         public LocationsForm(Village village, Action<ILocation> cardClickFunction, Action<LocationComponent, ILocation> onCardInitilize)
         {
+            //Setting fields
             _eventManager = EventManager.GetEventManager();
             _village = village;
             _cardClick = cardClickFunction;
             _cardOnInitilize = onCardInitilize;
+
+            //Building form
             Text = "PeopleVille";
             Width = 1200;
             Height = 1200;
@@ -35,15 +40,18 @@ namespace PeopleVille_GUI
 
             Controls.Add(_locationPanel);
 
+            //Adding events
             _eventManager.VillagerMovedAction += () =>
             {
                 LoadLocations();
             };
 
-
-            CreateLocationControls();
+            //Loading locations
+            LoadLocations();
         }
 
+
+        //Method that loads new location into locationPanel 
         private void LoadLocations()
         {
             _locationPanel.Controls.Clear();
@@ -53,11 +61,6 @@ namespace PeopleVille_GUI
                 panel = new LocationComponent(this ,location, _cardClick,  _cardOnInitilize);
                 _locationPanel.Controls.Add(panel);
             }
-        }
-
-        private void CreateLocationControls()
-        {
-            LoadLocations();
         }
     }
 }

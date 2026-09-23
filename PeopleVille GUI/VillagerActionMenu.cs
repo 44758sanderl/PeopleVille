@@ -14,6 +14,7 @@ namespace PeopleVille_GUI
     public partial class VillagerActionMenu : Form
     {
         private readonly EventManager _eventManager;
+        public readonly Panel mainPanel;
         public VillagerActionMenu(BaseVillager villager)
         {
             _eventManager = EventManager.GetEventManager();
@@ -82,6 +83,7 @@ namespace PeopleVille_GUI
                 inventory.Show();
             };
 
+            this.mainPanel = mainPanel;
 
 
             gotoButton.Click += (sender, e) =>

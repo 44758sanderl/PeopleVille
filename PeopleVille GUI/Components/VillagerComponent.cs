@@ -7,11 +7,11 @@ namespace PeopleVille_GUI.Components
     public class VillagerComponent : Panel
     {
         private readonly BaseVillager _villager;
-
-        public VillagerComponent(BaseVillager villager) {
+        private readonly Action _onClick;
+        public VillagerComponent(BaseVillager villager, Action OnClick) {
 
             _villager = villager;
-
+            _onClick = OnClick;
             this.Size = new Size(200, 300);
             this.BorderStyle = BorderStyle.FixedSingle;
 
@@ -37,10 +37,7 @@ namespace PeopleVille_GUI.Components
             this.Controls.Add(label);
             this.Controls.Add(pictureBox);
 
-            this.Click += (sender, e) =>
-            {
-                ShowVillagerActionMenu();
-            };
+            this.Click += (e, sender) => { OnClick(); };
 
         }
 
