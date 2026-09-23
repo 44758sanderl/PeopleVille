@@ -11,3 +11,4 @@ public interface IHouse : ILocation
     public int MaxPopulation { get; set; }
 
 }
+

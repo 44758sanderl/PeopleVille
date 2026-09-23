@@ -158,7 +158,7 @@ namespace PeopleVilleEngine.Locations
             }
             else
             {
-                Console.WriteLine("You do not have a bank card.");
+                Console.WriteLine("You do not have a bank card.");  
             }
         }
 
