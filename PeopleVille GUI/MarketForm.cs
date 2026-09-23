@@ -69,7 +69,7 @@ namespace PeopleVille_GUI
 
             foreach (BaseVillager villager in _location.Villagers())
             {
-                this.Controls.Add(new VillagerComponent(villager));
+                _marketVillagersPanel.Controls.Add(new VillagerComponent(villager));
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using PeopleVilleEngine.Locations;
+﻿  using PeopleVilleEngine.Locations;
 namespace PeopleVilleEngine.Villagers.Creators;
 public class VillagerCreatorAdult : IVillagerCreator
 {

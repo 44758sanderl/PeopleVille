@@ -90,11 +90,14 @@ namespace PeopleVille_GUI
                 Village? village = Village.VillageInstance;
                 if (village != null)
                 {
-                    LocationsForm locationsForm = new LocationsForm(village,
+                    LocationsForm? locationsForm = null;
+                    locationsForm = new LocationsForm(village,
                         (location) =>
                         {
                             villager.MoveVillager(location);
                             _eventManager.VillagerMoved();
+                            locationsForm.Close();
+                            this.Close();
                         },
                         (LocationComponent, location) =>
                         {

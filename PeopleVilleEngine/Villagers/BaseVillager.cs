@@ -19,7 +19,7 @@ public abstract class BaseVillager
     public ILocation? Home { get; set; } = null;
     public bool HasHome() => Home != null;
 
-    public ILocation CurrentLocation;
+    public ILocation CurrentLocation { get; set; }
 
     public event Action<BaseVillager>? Died;
     readonly List<BaseItem> availableItems = new List<BaseItem>

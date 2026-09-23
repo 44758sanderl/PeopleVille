@@ -1,11 +1,7 @@
 ﻿using PeopleVille_GUI.Components;
 using PeopleVilleEngine.Locations;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 namespace PeopleVille_GUI
@@ -14,9 +10,13 @@ namespace PeopleVille_GUI
     {
         private readonly FlowLayoutPanel _simpleHousePanel;
         private readonly SimpleHouse _location;
+        private readonly EventManager _eventManager;
+
         public SimpleHouseForm(SimpleHouse location)
         {
             _location = location;
+            _eventManager = EventManager.GetEventManager();
+
             Text = _location.Name;
             Width = 1200;
             Height = 1200;
@@ -31,9 +31,20 @@ namespace PeopleVille_GUI
 
             Controls.Add(_simpleHousePanel);
 
+            LoadVillagerComponents();
+
+            _eventManager.VillagerMovedAction += () =>
+            {
+                LoadVillagerComponents();
+            };
+        }
+
+        private void LoadVillagerComponents()
+        {
+            _simpleHousePanel.Controls.Clear();
+
             foreach (BaseVillager villager in _location.Villagers())
             {
-
                 VillagerComponent component = new VillagerComponent(villager);
 
                 _simpleHousePanel.Controls.Add(component);
