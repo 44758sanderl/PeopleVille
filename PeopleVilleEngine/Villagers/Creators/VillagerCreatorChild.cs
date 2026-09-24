@@ -16,6 +16,7 @@ public class VillagerCreatorChild : IVillagerCreator
 
         home.Villagers().Add(child);
         child.Home = home;
+        child.CurrentLocation = home;
         village.Villagers.Add(child);
         return true;
     }

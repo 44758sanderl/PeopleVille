@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="PeopleVille GUI/PeopleVille GUI.csproj" Id="dfb2176a-908b-4ce1-8697-02ec2ff9bc1b" />
   <Project Path="PeopleVille/PeopleVille.csproj" Id="c7572c4d-afde-41a8-b4ed-353d3dbb72b5" />
   <Project Path="PeopleVilleBaseVillagers/PeopleVilleBaseVillagers.csproj" />
   <Project Path="PeopleVilleEngine/PeopleVilleEngine.csproj" />

@@ -10,11 +10,12 @@ public class Village
     public List<BaseVillager> Villagers { get; } = new();
     public List<ILocation> Locations { get; } = new();
     public VillagerNames VillagerNameLibrary { get; } = VillagerNames.GetInstance();
-
+    public static Village? VillageInstance;
     public Village()
     {
         Console.WriteLine("Creating villager");
         CreateVillage();
+        VillageInstance = this;
     }
 
 
@@ -29,7 +30,7 @@ public class Village
 
         int villageCreatorindex = 0;
 
-        for (int i = 0; i < villagers; i++)
+        for (int i = 0; i < villagers; i++) 
         {
             var created = false;
             do
@@ -39,7 +40,10 @@ public class Village
             } while (!created);
         }
 
+        Market newMarket = new Market(this);
+        Locations.Add(newMarket);
         Console.ResetColor();
+        
     }
 
     private List<IVillagerCreator> LoadVillagerCreatorFactories()

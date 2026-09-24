@@ -6,52 +6,36 @@ namespace PeopleVilleEngine.Locations
     public class Market : ILocation
     {
         private readonly Village _village;
+        private readonly List<BaseVillager> _baseVillagerList = new();
+        public string Name => "This is a market!";
 
         public Market(Village village)
         {
             _village = village;
         }
 
-        public string Name => "Market";
-
         public List<BaseVillager> Villagers()
         {
-            return _village.Villagers;
+            return _baseVillagerList;
         }
 
-        public void OpenMarket()
-        {
-            Console.WriteLine("Welcome to the Market!");
 
-            var villagers = Villagers();
 
-            for (int i = 0; i < villagers.Count; i++)
-            {
-                Console.WriteLine($"{i}: {villagers[i].FirstName}");
-            }
+        //public void OpenMarket()
+        //{
+        //    Console.WriteLine("Welcome to the Market!");
+        //    var villagers = _village.Villagers;
 
-            Console.WriteLine("Choose first villager index:");
+        //    for (int i = 0; i < villagers.Count; i++)
+        //        Console.WriteLine($"{i}: {villagers[i].FirstName}");
 
-            if (!int.TryParse(Console.ReadLine(), out int v1Index) ||
-                v1Index < 0 ||
-                v1Index >= villagers.Count)
-            {
-                Console.WriteLine("Invalid villager index.");
-                return;
-            }
+        //    Console.WriteLine("Choose first villager index:");
+        //    int v1Index = int.Parse(Console.ReadLine());
+        //    Console.WriteLine("Choose second villager index:");
+        //    int v2Index = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("Choose second villager index:");
-
-            if (!int.TryParse(Console.ReadLine(), out int v2Index) ||
-                v2Index < 0 ||
-                v2Index >= villagers.Count)
-            {
-                Console.WriteLine("Invalid villager index.");
-                return;
-            }
-
-            Trade(villagers[v1Index], villagers[v2Index]);
-        }
+        //    Trade(villagers[v1Index], villagers[v2Index]);
+        //}
 
         private void Trade(BaseVillager villager1, BaseVillager villager2)
         {

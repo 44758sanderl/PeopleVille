@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using PeopleVilleEngine.Locations;
-
+﻿  using PeopleVilleEngine.Locations;
 namespace PeopleVilleEngine.Villagers.Creators;
 
 public class VillagerCreatorAdult : IVillagerCreator
@@ -35,7 +33,9 @@ public class VillagerCreatorAdult : IVillagerCreator
         }
 
         home.Villagers().Add(adult);
+
         adult.Home = home;
+        adult.CurrentLocation = home;
 
         // Add to village
         village.Villagers.Add(adult);
